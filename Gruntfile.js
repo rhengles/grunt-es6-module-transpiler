@@ -28,14 +28,6 @@ module.exports = function(grunt) {
       tests: ['tmp'],
     },
 
-    release: {
-      options: {
-        tagName: 'v<%= version %>',
-        commitMessage: 'Release v<%= version %> :tada:',
-        tagMessage: 'Release v<%= version %>'
-      }
-    },
-
     // Configuration to be run (and then tested).
     transpile: {
       toCJS: {
@@ -50,13 +42,6 @@ module.exports = function(grunt) {
         files: {
           'tmp/amd.js': ['test/fixtures/input.js'],
           'tmp/amd-bar.js': ['test/fixtures/bar.js']
-        }
-      },
-      toYUI: {
-        type: "yui",
-        files: {
-          'tmp/yui.js': ['test/fixtures/input.js'],
-          'tmp/yui-bar.js': ['test/fixtures/bar.js']
         }
       },
       toGlobals: {
@@ -107,31 +92,11 @@ module.exports = function(grunt) {
       coffeeSrc: {
         type: 'amd',
         files: {
-          'tmp/coffee.js': ['test/fixtures/coffee.coffee'],
+          'tmp/coffee.coffee': ['test/fixtures/coffee.coffee'],
         }
       },
-      mixedCoffeeAndJS: {
-        type: 'amd',
-        anonymous: true,
-        files: {
-          'tmp/anonymous.coffee': ['test/fixtures/anonymous.coffee'],
-          'tmp/anonymous.js': ['test/fixtures/anonymous.js'],
-        }
+      enable: {
       }
-      // importError: {
-      //   type: 'amd',
-      //   anonymous: true,
-      //   files: {
-      //     'tmp/import-error.js': ['test/fixtures/import-error.js']
-      //   }
-      // },
-      // exportError: {
-      //   type: 'amd',
-      //   anonymous: true,
-      //   files: {
-      //     'tmp/export-error.js': ['test/fixtures/export-error.js']
-      //   }
-      // }
     },
 
     // Unit tests.
@@ -148,7 +113,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
-  grunt.loadNpmTasks('grunt-release');
 
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.

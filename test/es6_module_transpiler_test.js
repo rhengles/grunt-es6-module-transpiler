@@ -48,15 +48,6 @@ exports.es6_module_transpiler = {
 
     test.done();
   },
-  toYUI: function(test) {
-    test.expect(1);
-
-    var actual = normalizedFileRead('tmp/yui.js');
-    var expected = normalizedFileRead('test/expected/yui.js');
-    test.equal(actual, expected, 'outputs YUI');
-
-    test.done();
-  },
   toGlobals: function(test) {
     test.expect(1);
 
@@ -102,13 +93,22 @@ exports.es6_module_transpiler = {
 
     test.done();
   },
-  mixedCoffeeAndJS: function(test) {
+  coffeeSrc: function(test) {
     test.expect(1);
 
-    // in the config there is a .coffee file listed before this one
-    var actual = normalizedFileRead('tmp/anonymous.js');
-    var expected = normalizedFileRead('test/expected/anonymous.js');
-    test.equal(actual, expected, 'uses coffee option only on CoffeeScript files');
+    var actual = normalizedFileRead('tmp/coffee.coffee');
+    var expected = normalizedFileRead('test/expected/coffee.coffee');
+    test.equal(actual.trim(), expected.trim(), 'understands coffee option');
+
+    test.done();
+  },
+  enable: function(test){
+    test.expect(1);
+
+    var actual = require("./expected/enable"),
+        expected = "bar";
+
+    test.equal(actual, expected, 'enables transpiler for node tasks');
 
     test.done();
   }

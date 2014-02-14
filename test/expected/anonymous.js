@@ -4,5 +4,6 @@ define(
     "use strict";
     var foo = "bar";
 
+
     __exports__.foo = foo;
   });

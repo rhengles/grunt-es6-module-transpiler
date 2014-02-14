@@ -12,19 +12,19 @@ module.exports = function(grunt) {
 
   var path = require('path');
 
-  function transpile(file, options) {
+  function transpile(file, options){
     var src = file.src,
-        Compiler = require("es6-module-transpiler").Compiler,
+        Compiler = require("es6-module-transpiler-rhengles").Compiler,
         compiler, compiled, ext, method, moduleName;
 
     ext = path.extname(src);
 
     if (ext.slice(1) === 'coffee') {
-      options = grunt.util._.extend({coffee: true}, options);
+      options.coffee = true;
     }
 
     if (options.anonymous) {
-      moduleName = '';
+      moduleName = null;
     } else if (typeof options.moduleName === 'string') {
       moduleName = options.moduleName;
     } else {
@@ -46,9 +46,6 @@ module.exports = function(grunt) {
     case 'amd':
       method = "toAMD";
       break;
-    case 'yui':
-      method = "toYUI";
-      break;
     case 'globals':
       method = "toGlobals";
       break;
@@ -61,20 +58,26 @@ module.exports = function(grunt) {
     grunt.file.write(file.dest, compiled);
   }
 
-  function formatTranspilerError(filename, e) {
-    var pos = '[' + 'L' + e.lineNumber + ':' + ('C' + e.column) + ']';
-    return filename + ': ' + pos + ' ' + e.description;
-  }
-
   grunt.registerMultiTask("transpile", function(){
 
     var opts = {};
 
-    opts.imports = this.data.imports;
-    opts.type = this.data.type;
+    opts.imports    = this.data.imports;
+    opts.type       = this.data.type;
     opts.moduleName = this.data.moduleName;
-    opts.anonymous = this.data.anonymous;
-    opts.compatFix = this.data.compatFix;
+    opts.anonymous  = this.data.anonymous;
+    opts.indent     = this.data.indent;
+    opts.eol        = this.data.eol;
+    opts.strict     = this.data.strict;
+    opts.squotes    = this.data.squotes;
+		opts.global     = this.data.global;
+    opts.dontIndentDefine   = this.data.dontIndentDefine;
+    opts.dontIndentDefineFn = this.data.dontIndentDefineFn;
+
+    if(this.target === "enable"){
+      require("es6-module-transpiler-rhengles/lib/require_support").enable();
+      return;
+    }
 
     this.files.forEach(function(file){
       file.src.filter(function(path){
@@ -85,14 +88,7 @@ module.exports = function(grunt) {
           return true;
         }
       }).forEach(function(path){
-        try {
-          transpile({src:path, dest:file.dest, orig:file.orig}, opts);
-        } catch (e) {
-          var message = formatTranspilerError(path, e);
-
-          grunt.log.error(message);
-          grunt.fail.warn('Error compiling ' + path);
-        }
+        transpile({src:path, dest:file.dest, orig:file.orig}, opts);
       });
     });
 

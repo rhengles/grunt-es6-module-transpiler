@@ -1,4 +1,5 @@
-(function(__dependency1__) {
+(function(Bar) {
   "use strict";
-  var foo = __dependency1__.foo;
+  var foo = Bar.foo;
+
 })(window.Bar);

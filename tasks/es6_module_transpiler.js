@@ -60,19 +60,33 @@ module.exports = function(grunt) {
 
   grunt.registerMultiTask("transpile", function(){
 
-    var opts = {};
+    var opts = this.data.options
+		  , eolMap =
+				{ win: '\r\n'
+				, nix: '\n'
+				, osx: '\n'
+				, mac: '\r'
+				};
+		//
+		// grunt.util.normalizelf
+		// grunt.template.process
+		// grunt.config.process
+		// grunt.config
+		// grunt.task.registerMultiTask
 
-    opts.imports    = this.data.imports;
-    opts.type       = this.data.type;
-    opts.moduleName = this.data.moduleName;
-    opts.anonymous  = this.data.anonymous;
-    opts.indent     = this.data.indent;
-    opts.eol        = this.data.eol;
-    opts.strict     = this.data.strict;
-    opts.squotes    = this.data.squotes;
-		opts.global     = this.data.global;
-    opts.dontIndentDefine   = this.data.dontIndentDefine;
-    opts.dontIndentDefineFn = this.data.dontIndentDefineFn;
+		//opts.imports    = this.data.imports;
+    //opts.type       = this.data.type;
+    //opts.moduleName = this.data.moduleName;
+    //opts.anonymous  = this.data.anonymous;
+    //opts.indent     = this.data.indent;
+    //opts.eol        = this.data.eol;
+    //opts.strict     = this.data.strict;
+    //opts.squotes    = this.data.squotes;
+    //opts.dontIndentDefine   = this.data.dontIndentDefine;
+    //opts.dontIndentDefineFn = this.data.dontIndentDefineFn;
+
+		opts && opts.eol && opts.eol in eolMap &&
+			(opts.eol = eolMap[opts.eol]);
 
     if(this.target === "enable"){
       require("es6-module-transpiler-rhengles/lib/require_support").enable();
